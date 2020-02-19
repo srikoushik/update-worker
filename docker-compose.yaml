@@ -7,7 +7,7 @@ services:
     volumes:
       - ./server:/code
     ports:
-      - "5000:5000"
+      - 5000:5000
   redis:
     image: redis:latest
     ports:
