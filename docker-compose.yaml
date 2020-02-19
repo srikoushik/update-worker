@@ -7,4 +7,4 @@ services:
     volumes:
       - ./server:/code
     ports:
-      - "5000:5000"a
+      - "5000:5000"
