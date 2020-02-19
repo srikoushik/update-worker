@@ -1,0 +1,10 @@
+version: "3.3"
+services:
+  flask:
+    build: ./server
+    image: flask:v1
+    working_dir: /code
+    volumes:
+      - ./server:/code
+    ports:
+      - "5000:5000"a
