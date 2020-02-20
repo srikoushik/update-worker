@@ -4,7 +4,7 @@ COPY . /code
 
 WORKDIR /code
 
-RUN pip install --upgrade --no-cache-dir -r /requirements.txt
+RUN pip install --upgrade --no-cache-dir -r requirements.txt
 
 EXPOSE 5000
 

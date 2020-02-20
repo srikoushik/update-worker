@@ -2,7 +2,7 @@ version: "3.3"
 services:
   flask:
     build: ./server
-    image: flask:v1
+    image: flask:v2
     working_dir: /code
     volumes:
       - ./server:/code
@@ -15,3 +15,9 @@ services:
     volumes: 
       - ./redis:/redis.conf
     command: [ "redis-server", "/redis.conf" ]
+  spark:
+    build: ./spark
+    image: spark:v2
+    working_dir: /code
+    volumes: 
+      - ./spark:/code
