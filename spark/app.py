@@ -4,40 +4,28 @@ import multiprocessing
 import redis
 import time
 import json
-import time
 import datetime
 
 client = redis.Redis(host='redis', port=6379)
 
 def update_to_redis(row):
-    color_as_key(row)
-    date_as_key(row)
+    color_and_date_as_key(row)
 
-def color_as_key(row):
+def color_and_date_as_key(row):
     data_to_update = {
         "id": row['id'],
         "brand": row['brand'],
         "color": row['colors'],
         "date": row['dateAdded']
     }
-    date = convert_str_to_date_object(row['dateAdded'])
-    score = date.timestamp()
+    product_created_date = convert_str_to_date_object(row['dateAdded'])
+    date = product_created_date.strftime("%Y-%m-%d")
+    score = product_created_date.timestamp()
     client.zadd(row['colors'], {json.dumps(data_to_update) : int(score)})
+    client.zadd(date, {json.dumps(data_to_update) : int(score)})
 
 def convert_str_to_date_object(date_string):
     return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
-
-def date_as_key(row):
-    data_to_update = {
-        "id": row['id'],
-        "brand": row['brand'],
-        "color": row['colors'],
-        "date": row['dateAdded']
-    }
-    dateAdded = convert_str_to_date_object(row['dateAdded'])
-    date = dateAdded.strftime("%Y-%m-%d")
-    score = dateAdded.timestamp()
-    client.zadd(date, {json.dumps(data_to_update) : int(score)})
 
 if __name__ == '__main__':
     scSpark = SparkSession \
