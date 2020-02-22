@@ -20,6 +20,19 @@ def get_recent_item(date):
 	result = client.zrevrange(date, 0, 0)
 	return Response(result, content_type='application/json')
 
+@app.route("/getBrandsCount/<date>")
+def get_brands_count(date):
+	result = client.zrevrange(date+"_count", 0, -1, 'withscores')
+	response = transform_list_to_dict(result)
+	return Response(json.dumps(response), content_type='application/json')
+
+def transform_list_to_dict(data):
+	transformed_data = []
+	for item in data:
+		key, value = item
+		transformed_data.append(dict({key.decode("utf-8"): int(value)}))
+	return transformed_data
+
 def transform_data_to_array(data):
 	transformed_data = []
 	for item in data:
