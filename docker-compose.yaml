@@ -2,22 +2,26 @@ version: "3.3"
 services:
   flask:
     build: ./server
-    image: flask:v2
+    image: flask:v3
     working_dir: /code
     volumes:
       - ./server:/code
     ports:
       - 5000:5000
+    depends_on:
+      - redis
   redis:
     image: redis:latest
     ports:
       - 6379:6379
-    volumes: 
+    volumes:
       - ./redis:/redis.conf
-    command: [ "redis-server", "/redis.conf" ]
+    command: ["redis-server", "/redis.conf"]
   spark:
     build: ./spark
     image: spark:v2
     working_dir: /code
-    volumes: 
+    volumes:
       - ./spark:/code
+    depends_on:
+      - redis
