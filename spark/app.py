@@ -21,8 +21,19 @@ def color_and_date_as_key(row):
     product_created_date = convert_str_to_date_object(row['dateAdded'])
     date = product_created_date.strftime("%Y-%m-%d")
     score = product_created_date.timestamp()
+    update_product_count_for_date(row, date)
     client.zadd(row['colors'], {json.dumps(data_to_update) : int(score)})
     client.zadd(date, {json.dumps(data_to_update) : int(score)})
+
+def update_product_count_for_date(row, product_created_date):
+    value = client.get(product_created_date+row['brand'])
+    if(value == None):
+        client.set(product_created_date+row['brand'], 1)
+        client.zadd(product_created_date+'_count', {row['brand'] : 1})
+    else:
+        score = int(value) + 1
+        client.incr(product_created_date+row['brand'])
+        client.zadd(product_created_date+'_count', {row['brand'] : score})
 
 def convert_str_to_date_object(date_string):
     return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
