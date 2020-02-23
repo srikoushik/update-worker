@@ -9,18 +9,18 @@ client = redis.Redis(host='redis', port=6379)
 def main():
 	return "Flask server is running!!"
 
-@app.route("/getItemsbyColor/<color>")
+@app.route("/items/color/<color>")
 def get_items_by_color(color):
 	result = client.zrevrange(color, 0, 9)
 	response = transform_data_to_array(result)
 	return Response(json.dumps(response), content_type='application/json')
 
-@app.route("/getRecentItem/<date>")
+@app.route("/items/recent/<date>")
 def get_recent_item(date):
 	result = client.zrevrange(date, 0, 0)
 	return Response(result, content_type='application/json')
 
-@app.route("/getBrandsCount/<date>")
+@app.route("/items/count/<date>")
 def get_brands_count(date):
 	result = client.zrevrange(date+"_count", 0, -1, 'withscores')
 	response = transform_list_to_dict(result)
