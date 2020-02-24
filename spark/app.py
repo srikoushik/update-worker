@@ -26,12 +26,12 @@ def update_to_redis(row):
 
 def update_product_count_for_date(row, product_created_date):
     dict_key = product_created_date+row['brand']
-    try:
+    if dict_key in brand_count_for_date.keys():
         value = brand_count_for_date[dict_key]
         score = value + 1
         brand_count_for_date[dict_key] += 1
         client.zadd(product_created_date+'_count', {row['brand'] : score})
-    except KeyError:
+    else:
         brand_count_for_date[dict_key] = 1
         client.zadd(product_created_date+'_count', {row['brand'] : 1})
 
