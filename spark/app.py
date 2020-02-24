@@ -39,8 +39,6 @@ def convert_str_to_date_object(date_string):
     return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
 
 if __name__ == '__main__':
-    before_time = time.time()
-
     scSpark = SparkSession \
         .builder \
         .appName("Reading csv") \
@@ -54,9 +52,6 @@ if __name__ == '__main__':
 
     data_without_null = transformed_data.where("id is not null and dateAdded is not null and colors is not null and brand is not null")
     
-    total_time = time.time() - before_time
-    print(f"Took {total_time} seconds before starting an update")
-
     start_time = time.time()
 
     pool = multiprocessing.Pool(processes = multiprocessing.cpu_count()-1)
