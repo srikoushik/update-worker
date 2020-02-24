@@ -39,18 +39,11 @@ def convert_str_to_date_object(date_string):
     return datetime.datetime.strptime(date_string, "%Y-%m-%dT%H:%M:%SZ")
 
 if __name__ == '__main__':
-    before_time = time.time()
-
     scSpark = SparkSession \
         .builder \
         .appName("Reading csv") \
         .master("spark://spark-master:7077") \
         .getOrCreate()
-
-    total_time = time.time() - before_time
-    print(f"Took {total_time} seconds to create spark session")
-
-    start_time_to_read_csv = time.time()
 
     file_data = os.path.dirname(os.path.realpath(__file__)) + "/dataset/*.csv"
 
@@ -60,9 +53,6 @@ if __name__ == '__main__':
 
     data_without_null = transformed_data.where("id is not null and dateAdded is not null and colors is not null and brand is not null")
     
-    total_time_to_read_csv = time.time() - start_time_to_read_csv
-    print(f"Took {total_time_to_read_csv} seconds to read and tranform csv")
-
     start_time = time.time()
 
     pool = multiprocessing.Pool(processes = multiprocessing.cpu_count()-1)
