@@ -17,11 +17,31 @@ services:
     volumes:
       - ./redis:/redis.conf
     command: ["redis-server", "/redis.conf"]
-  spark:
+  spark-master:
+    image: spark
     build: ./spark
-    image: spark:v2
-    working_dir: /code
+    command: standalone master
+    hostname: spark-master
+    expose:
+      - 7077
+    ports:
+      - 7077:7077
+      - 8080:8080
     volumes:
       - ./spark:/code
-    depends_on:
+    depends_on: 
       - redis
+  spark-worker1:
+    image: spark
+    command: standalone worker spark://spark-master:7077
+    expose:
+      - 8081
+    ports:
+      - 8081:8081
+    volumes:
+      - ./spark:/code
+    links:
+      - spark-master
+    depends_on:
+      - spark-master
+      - redis      

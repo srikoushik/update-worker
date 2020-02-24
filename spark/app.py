@@ -44,7 +44,13 @@ if __name__ == '__main__':
     scSpark = SparkSession \
         .builder \
         .appName("Reading csv") \
+        .master("spark://0.0.0.0:7077") \
         .getOrCreate()
+
+    total_time = time.time() - before_time
+    print(f"Took {total_time} seconds to create spark session")
+
+    start_time_to_read_csv = time.time()
 
     file_data = os.path.dirname(os.path.realpath(__file__)) + "/dataset/*.csv"
 
@@ -54,8 +60,8 @@ if __name__ == '__main__':
 
     data_without_null = transformed_data.where("id is not null and dateAdded is not null and colors is not null and brand is not null")
     
-    total_time = time.time() - before_time
-    print(f"Took {total_time} seconds before starting an update")
+    total_time_to_read_csv = time.time() - start_time_to_read_csv
+    print(f"Took {total_time_to_read_csv} seconds to read and tranform csv")
 
     start_time = time.time()
 
