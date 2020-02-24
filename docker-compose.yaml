@@ -40,7 +40,7 @@ services:
       - spark-master
     depends_on:
       - spark-master
-      - redis     
+      - redis
   spark-worker2:
     image: spark
     command: standalone worker spark://spark-master:7077
@@ -50,7 +50,7 @@ services:
       - spark-master
     depends_on:
       - spark-master
-      - redis     
+      - redis
   spark-main:
     image: spark
     command: python3 app.py
@@ -58,4 +58,4 @@ services:
       - ./spark:/code
     depends_on:
       - spark-master
-      - redis      
+      - redis
