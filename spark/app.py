@@ -44,7 +44,7 @@ if __name__ == '__main__':
     scSpark = SparkSession \
         .builder \
         .appName("Reading csv") \
-        .master("spark://0.0.0.0:7077") \
+        .master("spark://spark-master:7077") \
         .getOrCreate()
 
     total_time = time.time() - before_time
